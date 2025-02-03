@@ -11,7 +11,7 @@ from rest_framework.test import APIClient
 @pytest.mark.django_db
 @pytest.mark.usefixtures("create_test_user")
 class TestVerifyOTPView:
-    url = "/auth/api/v2/verify-otp"
+    url = "/api/auth/verify-otp"
 
     def test_verify_otp_success(self, api_client: APIClient):
         User.objects.create(email="testuser001@example.com", is_active=False)

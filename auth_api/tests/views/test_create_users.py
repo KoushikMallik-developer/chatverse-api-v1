@@ -7,15 +7,14 @@ from auth_api.services.definitions import DEFAULT_VERIFICATION_MESSAGE
 
 @pytest.mark.django_db
 class TestCreateUsersView:
-    url = "/auth/api/v2/create-users"
+    url = "/api/auth/create-users"
 
     def test_create_user_success(self):
         client = APIClient()
         data = {
             "email": "testuser@example.com",
             "password": "TestPassword123",
-            "fname": "Test",
-            "lname": "User",
+            "name": "Test User",
         }
         response = client.post(self.url, data, format="json")
 
@@ -23,8 +22,7 @@ class TestCreateUsersView:
         assert response.data["message"] == DEFAULT_VERIFICATION_MESSAGE
 
         user = User.objects.get(email="testuser@example.com")
-        assert user.fname == "Test"
-        assert user.lname == "User"
+        assert user.name == "Test User"
 
     def test_create_user_missing_name_fields(self):
         client = APIClient()
@@ -36,7 +34,7 @@ class TestCreateUsersView:
 
     def test_create_user_missing_email_fields(self):
         client = APIClient()
-        data = {"email": "testuser@example.com", "fname": "John", "lname": "Doe"}
+        data = {"email": "testuser@example.com", "name": "John Doe"}
         response = client.post(self.url, data, format="json")
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -44,7 +42,7 @@ class TestCreateUsersView:
 
     def test_create_user_missing_password_fields(self):
         client = APIClient()
-        data = {"fname": "John", "lname": "Doe", "password": "TestPassword123"}
+        data = {"name": "John Doe", "password": "TestPassword123"}
         response = client.post(self.url, data, format="json")
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -56,8 +54,7 @@ class TestCreateUsersView:
             "email": "invalid-email",
             "username": "testuser",
             "password": "TestPassword123",
-            "fname": "Test",
-            "lname": "User",
+            "name": "Test User",
             "dob": "1990-01-01",
             "phone": "1234567890",
         }
@@ -72,8 +69,7 @@ class TestCreateUsersView:
             "email": "testuser@example.com",
             "username": "testuser",
             "password": "TestPassword123",
-            "fname": "Test",
-            "lname": "User",
+            "name": "Test User",
             "dob": "1990-01-01",
             "phone": "1234567890",
         }

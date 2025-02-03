@@ -7,7 +7,7 @@ class TestAllUsersView:
     @pytest.mark.usefixtures("create_test_user")
     def test_get_all_users(self):
         client = APIClient()
-        url = "/auth/api/v2/all-users"
+        url = "/api/auth/all-users"
         response = client.get(url, None, format="json")
 
         assert response
@@ -26,20 +26,18 @@ class TestAllUsersView:
 
         for user in user_list:
             assert "email" in user
-            assert "fname" in user
-            assert "lname" in user
+            assert "name" in user
             assert "dob" in user
             assert "phone" in user
             assert user["email"] and isinstance(user["email"], str)
-            assert user["fname"] and isinstance(user["fname"], str)
-            assert user["lname"] and isinstance(user["lname"], str)
+            assert user["name"] and isinstance(user["name"], str)
             assert user["dob"] is None or isinstance(user["dob"], str)
             assert user["phone"] is None or isinstance(user["phone"], str)
 
     @pytest.mark.usefixtures("empty_database")
     def test_empty_user_list(self):
         client = APIClient()
-        url = "http://localhost:8000/auth/api/v2/all-users"
+        url = "http://localhost:8000/api/auth/all-users"
         response = client.get(url, None, format="json")
 
         assert response

@@ -6,7 +6,7 @@ class TokenGenerator:
     expiration_time = 24 * 60 * 60
 
     def get_tokens_for_user(self, user) -> dict:
-        cache_keyword = f"Split-It_User_{user.id}"
+        cache_keyword = f"Auth_User_{user.id}"
         if cache.get(cache_keyword):
             cached_data = cache.get(cache_keyword)
             return cached_data

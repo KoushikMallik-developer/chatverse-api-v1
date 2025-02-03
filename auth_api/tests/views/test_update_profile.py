@@ -6,7 +6,7 @@ from auth_api.models.user_models.user import User
 
 @pytest.mark.django_db
 class TestUpdateProfileView:
-    url = "/auth/api/v2/update-profile"
+    url = "/api/auth/update-profile"
 
     @pytest.mark.usefixtures("create_test_user")
     def test_update_profile_success(self, api_client: APIClient, access_token: str):
@@ -15,8 +15,7 @@ class TestUpdateProfileView:
             "Content-Type": "application/json",
         }
         data = {
-            "fname": "NewFirstName",
-            "lname": "NewLastName",
+            "name": "NewFirstName NewLastName",
             "email": "koushikmallik001@gmail.com",
             "username": "koushikmallik",
             "password": "1234567",
@@ -30,14 +29,12 @@ class TestUpdateProfileView:
         assert response.data["message"] == "User details updated Successfully."
 
         user = User.objects.get(email="koushikmallik001@gmail.com")
-        assert user.fname == "NewFirstName"
-        assert user.lname == "NewLastName"
+        assert user.name == "NewFirstName NewLastName"
 
     def test_update_profile_unauthorized(self, api_client: APIClient):
         data = {
             "username": "newusername",
-            "fname": "NewFirstName",
-            "lname": "NewLastName",
+            "name": "NewFirstName NewLastName",
         }
         response = api_client.post(self.url, data, format="json")
 
@@ -56,13 +53,9 @@ class TestUpdateProfileView:
             "Content-Type": "application/json",
         }
         data = {
-            "fname": "NewFirstName9",
-            "lname": "NewLastName",
+            "name": "NewFirstName9 NewLastName",
         }
         response = api_client.post(self.url, data, headers=headers, format="json")
 
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-        assert (
-            response.data["message"]
-            == "ValueError: First name is not in correct format."
-        )
+        assert response.data["message"] == "ValueError: Name is not in correct format."

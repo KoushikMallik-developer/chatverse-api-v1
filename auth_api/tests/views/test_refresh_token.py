@@ -7,7 +7,7 @@ from auth_api.models.user_models.user import User
 
 @pytest.mark.django_db
 class TestRefreshTokenView:
-    url = "/auth/api/v2/refresh-token"
+    url = "/api/auth/refresh-token"
 
     @pytest.mark.usefixtures("create_test_user")
     def test_refresh_token_success(self, api_client: APIClient):

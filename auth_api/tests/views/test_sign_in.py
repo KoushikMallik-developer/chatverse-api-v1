@@ -5,7 +5,7 @@ from rest_framework.test import APIClient
 @pytest.mark.django_db
 @pytest.mark.usefixtures("create_test_user")
 class TestSignInView:
-    url = "http://localhost:8000/auth/api/v2/sign-in"
+    url = "/api/auth/sign-in"
 
     @pytest.mark.parametrize(
         "email,password, expected",

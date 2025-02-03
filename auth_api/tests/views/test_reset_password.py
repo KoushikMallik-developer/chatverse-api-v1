@@ -5,7 +5,7 @@ from rest_framework import status
 
 @pytest.mark.django_db
 class TestPasswordResetView:
-    url = "/auth/api/v2/reset-password"
+    url = "/api/auth/reset-password"
 
     @pytest.mark.usefixtures("create_test_user")
     def test_password_reset_success(self, api_client: APIClient):

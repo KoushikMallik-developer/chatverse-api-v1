@@ -8,7 +8,9 @@ class AbstractUser(GenericBaseModel):
     email = models.EmailField(
         verbose_name="Email", max_length=255, unique=True, null=False
     )
-    account_type = models.CharField(max_length=10, choices=AccountType.choices, default=AccountType.REGULAR)
+    account_type = models.CharField(
+        max_length=10, choices=AccountType.choices, default=AccountType.REGULAR
+    )
     name = models.CharField(max_length=255, null=False)
     password = models.CharField(max_length=255, null=False)
     dob = models.DateField(null=True)

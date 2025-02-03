@@ -5,7 +5,7 @@ from rest_framework import status
 
 @pytest.mark.django_db
 class TestUpdatePasswordView:
-    url = "/auth/api/v2/update-password"
+    url = "/api/auth/update-password"
 
     @pytest.mark.usefixtures("create_test_user")
     def test_update_password_success(self, api_client: APIClient, access_token: str):

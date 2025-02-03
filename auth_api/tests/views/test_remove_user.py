@@ -7,7 +7,7 @@ from auth_api.models.user_models.user import User
 @pytest.mark.usefixtures("create_test_user")
 @pytest.mark.django_db
 class TestRemoveUserView:
-    url = "/auth/api/v2/remove-user"
+    url = "/api/auth/remove-user"
 
     def test_remove_user_success(self, api_client: APIClient, access_token: str):
         data = {"email": "koushikmallik001@gmail.com"}

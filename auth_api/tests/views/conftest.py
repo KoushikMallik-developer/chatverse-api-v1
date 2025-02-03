@@ -10,25 +10,31 @@ def user_list():
             "id": "a0309afd-2f4a-4726-9903-fb07e3d7500e",
             "username": "koushikmallik",
             "email": "koushikmallik001@gmail.com",
-            "fname": "Koushik",
-            "lname": "Google",
+            "name": "Koushik Mallik",
+            "account_type": "regular",
             "dob": None,
             "phone": None,
             "password": "b'gAAAAABlcLJF0FLjcCWFUWQfRl442eAlZ9_IGgfUJAHlXpinOI_YrnpfUtXBfKpJifVI9T9JNuSUy9ax3oCyLbbqouA8rjd9Lg=='",  # pragma: allowlist-secret # noqa
             "image": "/images/users/defaultUserImage.png",
             "is_active": True,
+            "is_deleted": False,
+            "is_admin": False,
+            "is_staff": False,
         },
         {
             "id": "8a3a52ad-bb84-425c-bda7-884effd28374",
-            "username": "koushikmallik",
+            "username": "koushikmallik1",
             "email": "animeshece1998@gmail.com",
-            "fname": "Koushik",
-            "lname": "Google",
+            "name": "Koushik Google",
             "password": "b'gAAAAABlcLJF0FLjcCWFUWQfRl442eAlZ9_IGgfUJAHlXpinOI_YrnpfUtXBfKpJifVI9T9JNuSUy9ax3oCyLbbqouA8rjd9Lg=='",  # pragma: allowlist-secret # noqa
+            "account_type": "regular",
             "dob": None,
             "phone": None,
             "image": "/images/users/defaultUserImage.png",
             "is_active": False,
+            "is_deleted": False,
+            "is_admin": False,
+            "is_staff": False,
         },
     ]
 
@@ -59,7 +65,7 @@ def access_token(api_client):
     }
 
     response = api_client.post(
-        "http://localhost:8000/auth/api/v2/sign-in", signin_data, format="json"
+        "http://localhost:8000/api/auth/sign-in", signin_data, format="json"
     )
     response = response.json()
     if "token" not in response:

@@ -1,6 +1,11 @@
+import os
 from enum import Enum
 
-default_email = "splitzy.official@gmail.com"
+from dotenv import load_dotenv
+
+load_dotenv()
+
+default_email = os.getenv("EMAIL_HOST_USER")
 DEFAULT_VERIFICATION_MESSAGE = (
     "Verification Email has been sent successfully to the user. Please verify your email to"
     " access the account."

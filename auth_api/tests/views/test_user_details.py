@@ -7,7 +7,7 @@ from rest_framework import status
 
 @pytest.mark.django_db
 class TestUserDetailsView:
-    url = "/auth/api/v2/user-details"
+    url = "/api/auth/user-details"
 
     @pytest.mark.usefixtures("create_test_user")
     def test_user_details_success(self, api_client: APIClient, access_token: str):
@@ -32,13 +32,9 @@ class TestUserDetailsView:
         assert response.data["data"]["image"]
         assert isinstance(response.data["data"]["image"], str)
 
-        assert response.data["data"]["fname"]
-        assert isinstance(response.data["data"]["fname"], str)
-        assert response.data["data"]["fname"] == "Koushik"
-
-        assert response.data["data"]["lname"]
-        assert isinstance(response.data["data"]["lname"], str)
-        assert response.data["data"]["lname"] == "Google"
+        assert response.data["data"]["name"]
+        assert isinstance(response.data["data"]["name"], str)
+        assert response.data["data"]["name"] == "Koushik Mallik"
 
     def test_user_details_invalid_token(self, api_client: APIClient):
         headers = {

@@ -10,7 +10,7 @@ from auth_api.services.otp_services.otp_services import OTPServices
 @pytest.mark.django_db
 @pytest.mark.usefixtures("create_test_user")
 class TestSendOTPView:
-    url = "/auth/api/v2/send-otp"
+    url = "/api/auth/send-otp"
 
     def test_send_otp_success(self):
         User.objects.create(email="testuser001@example.com", is_active=False)
