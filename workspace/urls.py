@@ -1,6 +1,9 @@
-# from django.urls import path
+from django.urls import path
 
+from workspace.views.fetch_workspaces_view import FetchWorkspacesView
 
-# urlpatterns = [
-#     path("clear-caches", ClearServerCaches.as_view(), name="clear-caches"),
-# ]
+urlpatterns = [
+    path(
+        "get-all-workspaces", FetchWorkspacesView.as_view(), name="get-all-workspaces"
+    ),
+]

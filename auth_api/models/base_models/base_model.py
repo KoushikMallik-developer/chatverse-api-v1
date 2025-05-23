@@ -17,9 +17,14 @@ class GenericBaseModel(models.Model):
 
     def model_to_dict(self) -> dict:
         try:
-            return {
+            # Handle regular fields
+            data = {
                 field.name: getattr(self, field.name) for field in self._meta.fields
             }
+            # Handle many-to-many fields
+            for field in self._meta.many_to_many:
+                data[field.name] = getattr(self, field.name)
+            return data
         except Exception:
             logging.error("Error occured  while converting model to dict")
             raise FieldError("Error occured  while converting model to dict")
