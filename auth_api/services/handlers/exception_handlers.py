@@ -17,6 +17,7 @@ from auth_api.auth_exceptions.user_exceptions import (
     UserNotAuthenticatedError,
     PasswordNotMatchError,
 )
+from workspace.exceptions.workspace_exceptions import WorkspaceAlreadyExists
 
 
 class ExceptionHandler:
@@ -80,6 +81,10 @@ class ExceptionHandler:
             },
             django.core.exceptions.ValidationError: {
                 "message": "ValidationError",
+                "status": status.HTTP_400_BAD_REQUEST,
+            },
+            WorkspaceAlreadyExists: {
+                "message": "WorkspaceAlreadyExists",
                 "status": status.HTTP_400_BAD_REQUEST,
             },
             # Exception: {

@@ -3,6 +3,7 @@ from workspace.export_types.workspace_types.workspace import (
     ExportWorkspaceList,
 )
 from workspace.models.workspace import Workspace
+from workspace.serializers.create_workspace_serializer import CreateWorkspaceSerializer
 
 
 class WorkspaceServices:
@@ -34,3 +35,26 @@ class WorkspaceServices:
             return workspace
         except Workspace.DoesNotExist:
             raise ValueError("Workspace does not exist")
+
+    def create_workspace(self, data, user_id: str):
+        """
+        Create a new workspace
+        :param data: CreateWorkshopRequest
+        :param user_id: str
+        :return: ExportWorkspace
+        """
+        workspace = CreateWorkspaceSerializer().create(
+            data={
+                "name": data.name,
+                "description": data.description,
+                "owner": user_id,
+                "members": (
+                    data.members
+                    if data.members and isinstance(data.members, list)
+                    else [user_id]
+                ),
+            }
+        )
+        workspace.members.add(user_id)
+        workspace = ExportWorkspace(**workspace.model_to_dict())
+        return workspace.model_dump()
