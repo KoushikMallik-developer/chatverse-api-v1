@@ -2,7 +2,7 @@ PUBLIC = "public"
 PRIVATE = "private"
 DM = "dm"
 CHANNEL_TYPES = [
-    (PUBLIC, "Public"),
-    (PRIVATE, "Private"),
+    (PUBLIC, "public"),
+    (PRIVATE, "private"),
     (DM, "Direct Message"),
 ]

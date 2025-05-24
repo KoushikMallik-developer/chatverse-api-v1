@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -26,6 +27,6 @@ class DeleteWorkspaceView(APIView):
             data={
                 "message": "Workspace deleted successfully.",
             },
-            status=200,
+            status=status.HTTP_200_OK,
             content_type="application/json",
         )

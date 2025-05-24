@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -25,5 +26,5 @@ class CreateChannelView(APIView):
         )
         return Response(
             data={"data": channel, "message": "Channel created successfully."},
-            status=201,
+            status=status.HTTP_201_CREATED,
         )

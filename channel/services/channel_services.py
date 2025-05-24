@@ -4,6 +4,7 @@ from channel.export_types.request_data_types.create_channel_request_type import 
 )
 from channel.models.channel import Channel
 from channel.serializers.create_channel_serializer import CreateChannelSerializer
+from workspace.exceptions.workspace_exceptions import PermissionDeniedError
 from workspace.models.workspace import Workspace
 
 
@@ -63,13 +64,32 @@ class ChannelServices:
         )
         return ExportChannel(**channel.model_to_dict()).model_dump()
 
-    def update_channel(self, channel_id, channel_data):
+    def update_channel(self, user_id, channel_id, data) -> dict:
         """
         Update an existing channel.
         :param channel_id: The ID of the channel to update.
+        :param user_id: The ID of the user making the update.
         :param channel_data: The updated data for the channel.
         """
-        raise NotImplementedError("This method should be implemented by subclasses.")
+        try:
+            channel = Channel.objects.get(id=channel_id)
+            if not channel:
+                raise ValueError(f"Channel with ID {channel_id} does not exist.")
+            if not str(channel.workspace.owner.id) == str(user_id):
+                raise PermissionDeniedError(
+                    "User does not have permission to update this channel."
+                )
+
+            channel.name = data.get("name", channel.name)
+            if Channel.objects.filter(name=channel.name).exists():
+                raise ValueError(f"Channel with name {channel.name} already exists.")
+            channel.description = data.get("description", channel.description)
+            channel.save()
+            return ExportChannel(**channel.model_to_dict()).model_dump()
+        except Channel.DoesNotExist:
+            raise ValueError(
+                f"Channel with ID {channel_id} does not exist or user is not a member."
+            )
 
     def delete_channel(self, channel_id):
         """

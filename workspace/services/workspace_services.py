@@ -38,7 +38,9 @@ class WorkspaceServices:
         """
         try:
             workspace = Workspace.objects.get(id=workspace_id, members__id=user_id)
-            workspace = ExportWorkspace(**workspace[0]) if workspace else None
+            workspace = (
+                ExportWorkspace(**workspace.model_to_dict()) if workspace else None
+            )
             return workspace
         except Workspace.DoesNotExist:
             raise ValueError("Workspace does not exist")
