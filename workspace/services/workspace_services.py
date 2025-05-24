@@ -1,6 +1,7 @@
 from typing import List
 
 from auth_api.models.user_models.user import User
+from workspace.exceptions.workspace_exceptions import PermissionDeniedError
 from workspace.export_types.request_data_types.create_workspace_request_type import (
     CreateWorkspaceRequest,
 )
@@ -106,15 +107,60 @@ class WorkspaceServices:
         try:
             workspace = Workspace.objects.get(id=workspace_id)
             if str(user_id) != str(workspace.owner.id):
-                raise ValueError("Only Owner can add members to the workspace")
+                raise PermissionDeniedError(
+                    "Only Owner can add members to the workspace"
+                )
             for member in members:
                 if member in workspace.members.values_list("id", flat=True):
                     raise ValueError("User is already a member of the workspace")
                 if not User.objects.filter(id=member).exists():
                     raise ValueError("User does not exist")
+            for member in members:
                 member = User.objects.get(id=member)
                 workspace.members.add(member)
             workspace.save()
             return ExportWorkspace(**workspace.model_to_dict()).model_dump()
+        except Workspace.DoesNotExist:
+            raise ValueError("Workspace does not exist")
+
+    def remove_member_from_workspace(
+        self, user_id: str, workspace_id: str, members: List[str]
+    ) -> dict:
+        """
+        Remove members from a workspace
+        :param user_id: str
+        :param workspace_id: str
+        :param members: list of member IDs
+        :return: dict
+        """
+        try:
+            workspace = Workspace.objects.get(id=workspace_id)
+            if str(user_id) != str(workspace.owner.id):
+                raise PermissionDeniedError(
+                    "Only Owner can remove members from the workspace"
+                )
+            for member in members:
+                if not workspace.members.filter(id=member).exists():
+                    raise ValueError("User is not a member of the workspace")
+            for member in members:
+                member = User.objects.get(id=member)
+                workspace.members.remove(member)
+            workspace.save()
+            return ExportWorkspace(**workspace.model_to_dict()).model_dump()
+        except Workspace.DoesNotExist:
+            raise ValueError("Workspace does not exist")
+
+    def delete_workspace(self, user_id: str, workspace_id: str):
+        """
+        Delete a workspace
+        :param user_id: str
+        :param workspace_id: str
+        :return: dict
+        """
+        try:
+            workspace = Workspace.objects.get(id=workspace_id)
+            if str(user_id) != str(workspace.owner.id):
+                raise PermissionDeniedError("Only Owner can delete the workspace")
+            workspace.delete()
         except Workspace.DoesNotExist:
             raise ValueError("Workspace does not exist")
