@@ -11,26 +11,22 @@ from workspace.export_types.request_data_types.create_workspace_request_type imp
 from workspace.services.workspace_services import WorkspaceServices
 
 
-class CreateWorkspaceView(APIView):
-    """
-    View for creating a new workspace.
-    """
-
+class UpdateWorkspaceView(APIView):
     renderer_classes = [JSONRenderer]
 
     @handle_exceptions
     @is_logged_in
-    def post(self, request):
+    def post(self, request, workspace_id: str):
         """
-        Create a new workspace.
-        :param request: The HTTP request object.
-        :return: A JSON response with the created workspace data.
+        Update workspace details.
         """
-        workspace = WorkspaceServices().create_workspace(
-            data=CreateWorkspaceRequest(**request.data), user_id=request.user.id
+        workspace = WorkspaceServices().update_workspace(
+            data=CreateWorkspaceRequest(**request.data),
+            workspace_id=workspace_id,
+            user_id=request.user.id,
         )
         return Response(
             data=workspace,
-            status=status.HTTP_201_CREATED,
+            status=status.HTTP_200_OK,
             content_type="application/json",
         )

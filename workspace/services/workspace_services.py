@@ -1,3 +1,6 @@
+from workspace.export_types.request_data_types.create_workspace_request_type import (
+    CreateWorkspaceRequest,
+)
 from workspace.export_types.workspace_types.workspace import (
     ExportWorkspace,
     ExportWorkspaceList,
@@ -58,3 +61,31 @@ class WorkspaceServices:
         workspace.members.add(user_id)
         workspace = ExportWorkspace(**workspace.model_to_dict())
         return workspace.model_dump()
+
+    def update_workspace(
+        self, data: CreateWorkspaceRequest, workspace_id: str, user_id: str
+    ):
+        """
+        Update a workspace
+        :param data: CreateWorkspaceRequest
+        :param workspace_id: str
+        :param user_id: str
+        :return: ExportWorkspace
+        """
+        try:
+            workspace = Workspace.objects.get(id=workspace_id, members__id=user_id)
+            workspace.name = (
+                data.name
+                if data.name and isinstance(data.name, str)
+                else workspace.name
+            )
+            workspace.description = (
+                data.description
+                if data.description and isinstance(data.description, str)
+                else workspace.description
+            )
+            workspace.save()
+            workspace = ExportWorkspace(**workspace.model_to_dict())
+            return workspace.model_dump()
+        except Workspace.DoesNotExist:
+            raise ValueError("Workspace does not exist")

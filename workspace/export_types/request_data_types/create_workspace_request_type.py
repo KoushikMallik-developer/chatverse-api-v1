@@ -3,7 +3,7 @@ from typing import Optional, List
 from pydantic import BaseModel
 
 
-class CreateWorkshopRequest(BaseModel):
+class CreateWorkspaceRequest(BaseModel):
     """
     Request data type for creating a new workspace.
     """
