@@ -8,22 +8,27 @@ from auth_api.services.utils.auth_decorators import is_logged_in
 from workspace.services.workspace_services import WorkspaceServices
 
 
-class FetchWorkspacesView(APIView):
+class AddMemberView(APIView):
     renderer_classes = [JSONRenderer]
 
     @handle_exceptions
     @is_logged_in
-    def get(self, request):
+    def post(self, request, workspace_id: str):
         """
-        Fetch workspaces for the user
-        :param request:
-        :return: List of workspaces
+        Add a member to the workspace.
+        :param request: The HTTP request object.
+        :param workspace_id: The ID of the workspace.
+        :return: A JSON response with the added member data.
         """
-        workspaces = WorkspaceServices().fetch_workspaces(user_id=request.user.id)
+        workspace = WorkspaceServices().add_member_to_workspace(
+            user_id=request.user.id,
+            workspace_id=workspace_id,
+            members=request.data.get("members", []),
+        )
         return Response(
             data={
-                "data": workspaces,
-                "message": "Workspaces fetched successfully.",
+                "data": workspace,
+                "message": "Member(s) added to workspace successfully.",
             },
             status=status.HTTP_200_OK,
             content_type="application/json",

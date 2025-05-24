@@ -26,7 +26,10 @@ class UpdateWorkspaceView(APIView):
             user_id=request.user.id,
         )
         return Response(
-            data=workspace,
+            data={
+                "data": workspace,
+                "message": "Workspace updated successfully.",
+            },
             status=status.HTTP_200_OK,
             content_type="application/json",
         )

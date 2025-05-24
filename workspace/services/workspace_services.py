@@ -1,3 +1,6 @@
+from typing import List
+
+from auth_api.models.user_models.user import User
 from workspace.export_types.request_data_types.create_workspace_request_type import (
     CreateWorkspaceRequest,
 )
@@ -87,5 +90,31 @@ class WorkspaceServices:
             workspace.save()
             workspace = ExportWorkspace(**workspace.model_to_dict())
             return workspace.model_dump()
+        except Workspace.DoesNotExist:
+            raise ValueError("Workspace does not exist")
+
+    def add_member_to_workspace(
+        self, user_id: str, workspace_id: str, members: List[str]
+    ) -> dict:
+        """
+        Add members to a workspace
+        :param user_id: str
+        :param workspace_id: str
+        :param members: list of member IDs
+        :return: dict
+        """
+        try:
+            workspace = Workspace.objects.get(id=workspace_id)
+            if str(user_id) != str(workspace.owner.id):
+                raise ValueError("Only Owner can add members to the workspace")
+            for member in members:
+                if member in workspace.members.values_list("id", flat=True):
+                    raise ValueError("User is already a member of the workspace")
+                if not User.objects.filter(id=member).exists():
+                    raise ValueError("User does not exist")
+                member = User.objects.get(id=member)
+                workspace.members.add(member)
+            workspace.save()
+            return ExportWorkspace(**workspace.model_to_dict()).model_dump()
         except Workspace.DoesNotExist:
             raise ValueError("Workspace does not exist")

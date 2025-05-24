@@ -30,7 +30,10 @@ class CreateWorkspaceView(APIView):
             data=CreateWorkspaceRequest(**request.data), user_id=request.user.id
         )
         return Response(
-            data=workspace,
+            data={
+                "data": workspace,
+                "message": "Workspace created successfully.",
+            },
             status=status.HTTP_201_CREATED,
             content_type="application/json",
         )
