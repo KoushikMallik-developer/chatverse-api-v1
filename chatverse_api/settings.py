@@ -25,6 +25,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "auth_api",
+    "workspace",
+    "channel",
+    "message",
 ]
 
 CORS_ALLOWED_ORIGINS = [
