@@ -23,4 +23,5 @@ urlpatterns = [
     path("api/auth/", include("auth_api.urls")),
     path("api/workspaces/", include("workspace.urls")),
     path("api/channels/", include("channel.urls")),
+    path("api/messages/", include("message.urls")),
 ]
