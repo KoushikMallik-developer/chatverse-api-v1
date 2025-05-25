@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -27,6 +28,6 @@ class UpdateChannelView(APIView):
         )
         return Response(
             data={"data": channel, "message": "Channel updated successfully."},
-            status=200,
+            status=status.HTTP_200_OK,
             content_type="application/json",
         )

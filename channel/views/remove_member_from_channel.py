@@ -7,25 +7,27 @@ from auth_api.services.utils.auth_decorators import is_logged_in
 from channel.services.channel_services import ChannelServices
 
 
-class FetchAllChannelsView(APIView):
+class RemoveMemberFromChannelView(APIView):
     """
-    Fetch all channels.
+    View to remove a member from a channel.
     """
 
     @handle_exceptions
     @is_logged_in
-    def get(self, request, workspace_id: str):
+    def post(self, request, channel_id: str) -> Response:
         """
-        Fetch all channels.
-        :param request: The request object.
-        :param workspace_id: The ID of the workspace to fetch channels from.
-        :return: A JSON response with the list of channels.
+        Handle DELETE request to remove a member from a channel.
         """
-        channels = ChannelServices().fetch_all_channels(
-            workspace_id=workspace_id, user_id=request.user.id
+        channel = ChannelServices().remove_member_from_channel(
+            channel_id=channel_id,
+            user_id=request.user.id,
+            member_id=request.data.get("member_id"),
         )
         return Response(
-            data={"data": channels, "message": "Channels fetched successfully"},
+            data={
+                "data": channel,
+                "message": "Member removed from channel successfully.",
+            },
             status=status.HTTP_200_OK,
             content_type="application/json",
         )

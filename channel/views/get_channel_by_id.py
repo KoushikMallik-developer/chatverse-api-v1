@@ -7,25 +7,25 @@ from auth_api.services.utils.auth_decorators import is_logged_in
 from channel.services.channel_services import ChannelServices
 
 
-class FetchAllChannelsView(APIView):
+class GetChannelByIDView(APIView):
     """
-    Fetch all channels.
+    View to get a channel by its ID.
     """
 
     @handle_exceptions
     @is_logged_in
-    def get(self, request, workspace_id: str):
+    def get(self, request, channel_id: str):
         """
-        Fetch all channels.
+        Handle GET request to retrieve a channel by its ID.
         :param request: The request object.
-        :param workspace_id: The ID of the workspace to fetch channels from.
-        :return: A JSON response with the list of channels.
+        :param channel_id: The ID of the channel to be retrieved.
+        :return: A JSON response with the channel details.
         """
-        channels = ChannelServices().fetch_all_channels(
-            workspace_id=workspace_id, user_id=request.user.id
+        channel = ChannelServices().fetch_channel_by_id(
+            channel_id=channel_id, user_id=request.user.id
         )
         return Response(
-            data={"data": channels, "message": "Channels fetched successfully"},
+            data={"data": channel, "message": "Channel fetched successfully."},
             status=status.HTTP_200_OK,
             content_type="application/json",
         )

@@ -27,4 +27,5 @@ class CreateChannelView(APIView):
         return Response(
             data={"data": channel, "message": "Channel created successfully."},
             status=status.HTTP_201_CREATED,
+            content_type="application/json",
         )
